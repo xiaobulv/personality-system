@@ -4,13 +4,21 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import CreateTask from "./pages/CreateTask";
+import ReportDetail from "./pages/ReportDetail";
+import ReportList from "./pages/ReportList";
+import TeamMap from "./pages/TeamMap";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={Dashboard} />
+      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/tasks/create" component={CreateTask} />
+      <Route path="/reports" component={ReportList} />
+      <Route path="/reports/:uuid" component={ReportDetail} />
+      <Route path="/team-map" component={TeamMap} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

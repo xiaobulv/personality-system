@@ -36,6 +36,20 @@ export function registerOAuthRoutes(app: Express) {
         lastSignedIn: new Date(),
       });
 
+      // 检查用户是否已有租户，如果没有则创建
+      const user = await db.getUserByOpenId(userInfo.openId);
+      if (user && !user.tenantId) {
+        try {
+          await db.createTenant({
+            name: `${user.name || '用户'}的空间`,
+            ownerUserId: user.id,
+          });
+          console.log(`[OAuth] Created tenant for user ${user.id}`);
+        } catch (error) {
+          console.error('[OAuth] Failed to create tenant:', error);
+        }
+      }
+
       const sessionToken = await sdk.createSessionToken(userInfo.openId, {
         name: userInfo.name || "",
         expiresInMs: ONE_YEAR_MS,
